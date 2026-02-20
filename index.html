@@ -29,11 +29,10 @@
                 <option value="Bangalore">Bangalore</option>
             </select>
 
-            <select id="route">
-                <option>Select Route</option>
-                <option>Route 1</option>
-                <option>Route 2</option>
-                <option>Route 3</option>
+            <select id="routeSelect">
+                <option value="">Select Route</option>
+                <option value="route1">Route 1 (Airport Exp)</option>
+                <option value="route2">Route 2 (City Center)</option>
             </select>
         </div>
 
@@ -43,22 +42,31 @@
                 <span id="buses">--</span>
             </div>
             <div class="card">
-                <h3>Active Routes</h3>
-                <span id="activeRoute">--</span>
-            </div>
-            <div class="card">
-                <h3>Avg Arrival Time</h3>
+                <h3>Avg Arrival</h3>
                 <span id="arrivalTime">--</span>
             </div>
         </div>
 
         <div class="map-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h2>LIVE BUS TRACKING MAP</h2>
+                <h2>LIVE BUS TRACKING</h2>
                 <button id="locateMe" class="locate-btn">📍 My Location</button>
             </div>
-            <div id="map"></div>
-            <div class="location" id="location">📍 Current Location: Not Selected</div>
+
+            <div class="map-wrapper" id="mapWrapper">
+                <div id="map"></div>
+                
+                <div id="detailsPanel" class="details-panel">
+                    <button class="close-btn" id="closeDetails">&times;</button>
+                    <div class="details-content">
+                        <h3>Bus Information</h3>
+                        <p><strong>ID:</strong> <span id="detBusNo">--</span></p>
+                        <p><strong>Type:</strong> <span id="detType">--</span></p>
+                        <p><strong>Route:</strong> <span id="detRoute">--</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="location" id="location">📍 Status: Waiting for Selection</div>
         </div>
     </div>
 
