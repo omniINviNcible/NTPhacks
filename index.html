@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>T Services Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 </head>
+
 <body>
     <div class="navbar">
         <div class="logo">T SERVICES</div>
@@ -25,16 +28,22 @@
                 <option value="Mumbai">Mumbai</option>
                 <option value="Bangalore">Bangalore</option>
             </select>
-            
+
             <select id="routeSelect">
                 <option value="">Select Route</option>
             </select>
         </div>
-        
+
         <div class="cards">
-            <div class="card"><h3>Total Buses</h3><span id="buses">--</span></div>
-            <div class="card"><h3>Active Routes</h3><span id="activeRoutes">--</span></div>
-            <div class="card"><h3>Avg Arrival</h3><span id="arrivalTime">--</span></div>
+            <div class="card">
+                <h3>Total Buses</h3><span id="buses">--</span>
+            </div>
+            <div class="card">
+                <h3>Active Routes</h3><span id="activeRoutes">--</span>
+            </div>
+            <div class="card">
+                <h3>Avg Arrival</h3><span id="arrivalTime">--</span>
+            </div>
         </div>
 
         <div class="map-section">
@@ -58,6 +67,8 @@
         </div>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 </body>
+
 </html>
