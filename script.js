@@ -115,5 +115,3 @@ document.getElementById('genderToggle').addEventListener('click', function() {
     this.classList.toggle('female');
     document.body.classList.toggle('light');
 });
-
-
