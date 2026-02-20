@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>T Services Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">T SERVICES</div>
+        <div class="gender-toggle" id="genderToggle">
+            <div class="slider"></div>
+            <span class="option active">M</span>
+            <span class="option">F</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome">Welcome Back, User</div>
+
+        <div class="filters">
+            <select id="city">
+                <option value="">Select City</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+            </select>
+
+            <select id="route">
+                <option>Select Route</option>
+                <option>Route 1</option>
+                <option>Route 2</option>
+                <option>Route 3</option>
+            </select>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Total Buses</h3>
+                <span id="buses">--</span>
+            </div>
+            <div class="card">
+                <h3>Active Routes</h3>
+                <span id="activeRoute">--</span>
+            </div>
+            <div class="card">
+                <h3>Avg Arrival Time</h3>
+                <span id="arrivalTime">--</span>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <h2>LIVE BUS TRACKING MAP</h2>
+            <div id="map"></div>
+            <div class="location" id="location">📍 Current Location: Not Selected</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
