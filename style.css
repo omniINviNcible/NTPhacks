@@ -1,77 +1,47 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background: linear-gradient(135deg, #0f1f3d, #081424); color: white; min-height: 100vh; transition: 0.3s; }
 
-body {
-    background: linear-gradient(135deg, #0f1f3d, #081424);
-    color: white;
-    min-height: 100vh;
-}
-
-/* NAVBAR & TOGGLE */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; }
 .logo { font-size: 24px; font-weight: 600; }
+
 .gender-toggle { position: relative; width: 80px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 50px; display: flex; align-items: center; cursor: pointer; }
 .gender-toggle .slider { position: absolute; width: 34px; height: 28px; background: #3a6ff7; border-radius: 50px; left: 4px; transition: 0.3s; }
 .gender-toggle.female .slider { left: 42px; }
 .gender-toggle span { flex: 1; text-align: center; z-index: 2; font-size: 14px; color: #aaa; }
 
-/* CONTAINER & CARDS */
 .container { padding: 30px 60px; }
 .welcome { text-align: center; font-size: 28px; margin-bottom: 25px; }
 .filters { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-select { background: #13294b; border: 1px solid #274472; color: white; padding: 10px 15px; border-radius: 8px; }
+select { background: #13294b; border: 1px solid #274472; color: white; padding: 10px 15px; border-radius: 8px; outline: none; }
 
 .cards { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-.card {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 25px;
-    border-radius: 12px;
-    width: 250px;
-    text-align: center;
-}
+.card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; width: 250px; text-align: center; }
 .card span { font-size: 32px; font-weight: bold; color: #3a6ff7; }
 
-/* MAP SECTION - BLUR REMOVED */
-.map-section {
-    background: #111d33; /* Solid background to prevent transparency blur */
-    border-radius: 15px;
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
+/* MAP SPLIT VIEW */
+.map-section { background: #111d33; border-radius: 15px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+.map-wrapper { display: flex; width: 100%; height: 450px; border-radius: 10px; overflow: hidden; background: white; }
+
+#map { flex: 1; height: 100%; transition: 0.4s ease; z-index: 1; }
+
+.details-panel { 
+    width: 0; 
+    background: white; 
+    color: #0f1f3d; 
+    transition: 0.4s ease; 
+    overflow: hidden;
 }
 
-#map {
-    width: 100%;
-    height: 450px;
-    border-radius: 10px;
-    background: white;
-    z-index: 1;
-    /* No filters or blurs here to keep map sharp */
-}
+.map-wrapper.active #map { flex: 0.7; }
+.map-wrapper.active .details-panel { width: 30%; padding: 20px; border-left: 3px solid #3a6ff7; }
 
-.locate-btn {
-    background: #3a6ff7;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+.close-btn { background: none; border: none; font-size: 30px; cursor: pointer; float: right; }
+.details-content h3 { color: #3a6ff7; margin-bottom: 15px; }
+.details-content p { margin: 10px 0; font-size: 15px; }
 
-.location { margin-top: 15px; padding: 12px; background: #13294b; border-radius: 8px; }
+.locate-btn { background: #3a6ff7; border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+.location { margin-top: 15px; padding: 12px; background: #13294b; border-radius: 8px; font-size: 14px; }
 
-/* Bus Label Styling */
-.bus-label {
-    background: white;
-    color: #111d33;
-    border: 2px solid #3a6ff7;
-    border-radius: 5px;
-    padding: 2px 6px;
-    font-weight: bold;
-    font-size: 11px;
-}
+/* Route Line Styling */
+.leaflet-interactive { stroke-dasharray: 10, 10; animation: dash 5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -100; } }
