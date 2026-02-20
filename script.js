@@ -1,26 +1,3 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAbwQH95nI90uCT0XhPcV7fEp1DHcus63s",
-    authDomain: "ntphacks-b7f76.firebaseapp.com",
-    projectId: "ntphacks-b7f76",
-    storageBucket: "ntphacks-b7f76.firebasestorage.app",
-    messagingSenderId: "747674929315",
-    appId: "1:747674929315:web:d55c96281ab3eb109c9716",
-    measurementId: "G-TKRL1G174R"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 const map = L.map('map').setView([20.5937, 78.9629], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -138,4 +115,5 @@ document.getElementById('genderToggle').addEventListener('click', function() {
     this.classList.toggle('female');
     document.body.classList.toggle('light');
 });
+
 
