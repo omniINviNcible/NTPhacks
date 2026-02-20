@@ -1,10 +1,17 @@
 // Initialize Map
-const map = L.map('map').setView([20.5937, 78.9629], 5); 
+const map = L.map('map').setView([20.5937, 78.9629], 5);
 
-// Changed to Standard Light Tiles (White Background)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
+
+// 1. Create a custom Bus Logo Icon
+const busIcon = L.divIcon({
+    html: `<span>🚌</span>`, // You can replace this with an <img> tag for a specific logo
+    className: 'custom-bus-icon',
+    iconSize: [30, 30],
+    iconAnchor: [15, 15]
+});
 
 const transportData = {
     "Delhi": { buses: 142, routes: 12, time: "6 mins", lat: 28.6139, lng: 77.2090 },
@@ -12,41 +19,60 @@ const transportData = {
     "Bangalore": { buses: 75, routes: 15, time: "10 mins", lat: 12.9716, lng: 77.5946 }
 };
 
-const busMarker = L.marker([20.5937, 78.9629]).addTo(map);
+let busLayer = L.layerGroup().addTo(map);
 
-const citySelect = document.getElementById('city');
-const busSpan = document.getElementById('buses');
-const routeSpan = document.getElementById('activeRoute');
-const timeSpan = document.getElementById('arrivalTime');
-const locationDiv = document.getElementById('location');
-
-citySelect.addEventListener('change', (e) => {
-    const selectedCity = e.target.value;
-
-    if (transportData[selectedCity]) {
-        const data = transportData[selectedCity];
-        busSpan.innerText = data.buses;
-        routeSpan.innerText = data.routes;
-        timeSpan.innerText = data.time;
+// Function to spawn buses with the Bus Logo
+function spawnBuses(lat, lng) {
+    busLayer.clearLayers();
+    for(let i = 1; i <= 3; i++) {
+        let randomLat = lat + (Math.random() - 0.5) * 0.015;
+        let randomLng = lng + (Math.random() - 0.5) * 0.015;
         
-        map.flyTo([data.lat, data.lng], 12);
-        busMarker.setLatLng([data.lat, data.lng])
-                 .bindPopup(`Live Tracking in ${selectedCity}`)
-                 .openPopup();
+        let marker = L.marker([randomLat, randomLng], { icon: busIcon }).addTo(busLayer);
         
-        locationDiv.innerText = `📍 Current Location: ${selectedCity}`;
-    } else {
-        busSpan.innerText = "--";
-        routeSpan.innerText = "--";
-        timeSpan.innerText = "--";
-        locationDiv.innerText = "📍 Current Location: Not Selected";
-        map.flyTo([20.5937, 78.9629], 5);
+        marker.bindTooltip(`Bus #${100+i} | Route ${i}`, {
+            permanent: true,
+            direction: 'top',
+            className: 'bus-label'
+        });
+    }
+}
+
+// Handle City Selection
+document.getElementById('city').addEventListener('change', (e) => {
+    const city = e.target.value;
+    if (transportData[city]) {
+        const d = transportData[city];
+        document.getElementById('buses').innerText = d.buses;
+        document.getElementById('activeRoute').innerText = d.routes;
+        document.getElementById('arrivalTime').innerText = d.time;
+        
+        map.flyTo([d.lat, d.lng], 14);
+        spawnBuses(d.lat, d.lng);
+        document.getElementById('location').innerText = `📍 Current Location: ${city}`;
     }
 });
 
-// Gender Toggle stays functional
-const genderToggle = document.getElementById('genderToggle');
-genderToggle.addEventListener('click', () => {
-    genderToggle.classList.toggle('female');
+// 2. Locate Me using the default pointer
+document.getElementById('locateMe').addEventListener('click', () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude, longitude } = pos.coords;
+            map.flyTo([latitude, longitude], 15);
+            
+            // Standard Leaflet Pointer (Default)
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup("<b>Your Current Location</b>")
+                .openPopup();
+            
+            spawnBuses(latitude, longitude);
+            document.getElementById('location').innerText = `📍 Current Location: My Device`;
+        });
+    }
+});
 
+// Theme Toggle
+document.getElementById('genderToggle').addEventListener('click', function() {
+    this.classList.toggle('female');
+    document.body.classList.toggle('light');
 });
