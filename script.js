@@ -1,77 +1,67 @@
-// Initialize Map
 const map = L.map('map').setView([20.5937, 78.9629], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
-
-// 1. Create a custom Bus Logo Icon
-const busIcon = L.divIcon({
-    html: `<span>🚌</span>`, // You can replace this with an <img> tag for a specific logo
-    className: 'custom-bus-icon',
-    iconSize: [30, 30],
-    iconAnchor: [15, 15]
-});
-
-const transportData = {
-    "Delhi": { buses: 142, routes: 12, time: "6 mins", lat: 28.6139, lng: 77.2090 },
-    "Mumbai": { buses: 98, routes: 8, time: "12 mins", lat: 19.0760, lng: 72.8777 },
-    "Bangalore": { buses: 75, routes: 15, time: "10 mins", lat: 12.9716, lng: 77.5946 }
+// 1. DATA: Defined paths for the routes (Ola style)
+const routePaths = {
+    "route1": [
+        [28.6139, 77.2090], [28.6200, 77.2150], [28.6300, 77.2200], [28.6400, 77.2300]
+    ],
+    "route2": [
+        [28.6139, 77.2090], [28.6000, 77.2000], [28.5800, 77.1800], [28.5600, 77.1600]
+    ]
 };
 
+let currentRouteLine = L.polyline([], {color: '#3a6ff7', weight: 6}).addTo(map);
 let busLayer = L.layerGroup().addTo(map);
 
-// Function to spawn buses with the Bus Logo
-function spawnBuses(lat, lng) {
-    busLayer.clearLayers();
-    for(let i = 1; i <= 3; i++) {
-        let randomLat = lat + (Math.random() - 0.5) * 0.015;
-        let randomLng = lng + (Math.random() - 0.5) * 0.015;
+// 2. Function to draw the route and zoom (Ola Style)
+function drawFullRoute(routeName) {
+    const path = routePaths[routeName];
+    if (path) {
+        currentRouteLine.setLatLngs(path);
         
-        let marker = L.marker([randomLat, randomLng], { icon: busIcon }).addTo(busLayer);
+        // Auto-zoom to fit the whole route
+        map.fitBounds(currentRouteLine.getBounds(), {padding: [50, 50]});
         
-        marker.bindTooltip(`Bus #${100+i} | Route ${i}`, {
-            permanent: true,
-            direction: 'top',
-            className: 'bus-label'
-        });
+        // Add a bus marker at the end of the path
+        spawnBusAt(path[path.length - 1], "TX-99", "Electric AC", routeName);
     }
 }
 
-// Handle City Selection
-document.getElementById('city').addEventListener('change', (e) => {
-    const city = e.target.value;
-    if (transportData[city]) {
-        const d = transportData[city];
-        document.getElementById('buses').innerText = d.buses;
-        document.getElementById('activeRoute').innerText = d.routes;
-        document.getElementById('arrivalTime').innerText = d.time;
+function spawnBusAt(coords, id, type, route) {
+    busLayer.clearLayers();
+    const marker = L.marker(coords).addTo(busLayer);
+    
+    marker.on('click', () => {
+        document.getElementById('detBusNo').innerText = id;
+        document.getElementById('detType').innerText = type;
+        document.getElementById('detRoute').innerText = route;
         
-        map.flyTo([d.lat, d.lng], 14);
-        spawnBuses(d.lat, d.lng);
-        document.getElementById('location').innerText = `📍 Current Location: ${city}`;
+        document.getElementById('mapWrapper').classList.add('active');
+        setTimeout(() => map.invalidateSize(), 400);
+    });
+}
+
+// 3. LISTENERS
+document.getElementById('routeSelect').addEventListener('change', (e) => {
+    if (e.target.value) drawFullRoute(e.target.value);
+});
+
+document.getElementById('city').addEventListener('change', (e) => {
+    const cities = {"Delhi": [28.6139, 77.2090], "Mumbai": [19.0760, 72.8777], "Bangalore": [12.9716, 77.5946]};
+    if (cities[e.target.value]) {
+        map.flyTo(cities[e.target.value], 12);
+        document.getElementById('buses').innerText = "24";
+        document.getElementById('arrivalTime').innerText = "8 mins";
+        document.getElementById('location').innerText = `📍 Status: Viewing ${e.target.value}`;
     }
 });
 
-// 2. Locate Me using the default pointer
-document.getElementById('locateMe').addEventListener('click', () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const { latitude, longitude } = pos.coords;
-            map.flyTo([latitude, longitude], 15);
-            
-            // Standard Leaflet Pointer (Default)
-            L.marker([latitude, longitude]).addTo(map)
-                .bindPopup("<b>Your Current Location</b>")
-                .openPopup();
-            
-            spawnBuses(latitude, longitude);
-            document.getElementById('location').innerText = `📍 Current Location: My Device`;
-        });
-    }
+document.getElementById('closeDetails').addEventListener('click', () => {
+    document.getElementById('mapWrapper').classList.remove('active');
+    setTimeout(() => map.invalidateSize(), 400);
 });
 
-// Theme Toggle
 document.getElementById('genderToggle').addEventListener('click', function() {
     this.classList.toggle('female');
     document.body.classList.toggle('light');
