@@ -48,5 +48,5 @@ citySelect.addEventListener('change', (e) => {
 const genderToggle = document.getElementById('genderToggle');
 genderToggle.addEventListener('click', () => {
     genderToggle.classList.toggle('female');
-    document.body.classList.toggle('light');
+
 });
